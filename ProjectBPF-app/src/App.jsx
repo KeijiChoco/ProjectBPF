@@ -10,6 +10,9 @@ function App() {
         {/* Main Routes */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<DashboardAdmin />} />
+          {/* <Route path="/crudprogram" element={<DashboardAdmin />} />
+          <Route path="/crudartikel" element={<DashboardAdmin />} />
+          <Route path="/crudfaq" element={<DashboardAdmin />} /> */}
         </Route>
     </Routes>
   )
