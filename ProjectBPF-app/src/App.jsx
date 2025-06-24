@@ -18,6 +18,8 @@ import MainLayoutGuest from './layouts/MainLayoutGuest';
 import HomePageGuest from './pages/HomePageGuest';     
 import ProgramPage from './pages/ProgramPage';
 import FaqPage from './pages/FAQPage';
+import ArtikelPage from "./pages/ArtikelPage";
+import AboutUsPage from "./pages/AboutUsPage";
 function App() {
   return (
     <Routes>
@@ -27,8 +29,8 @@ function App() {
         <Route index element={<HomePageGuest />} /> {/* Halaman utama /guest */}
         <Route path="program" element={<ProgramPage />} />
         <Route path="faq" element={<FaqPage />} />
-        {/* <Route path="artikel" element={<ArtikelPage />} /> */}
-        {/* <Route path="about-us" element={<AboutUsPage />} /> */}
+        <Route path="artikel" element={<ArtikelPage />} />
+        <Route path="about-us" element={<AboutUsPage />} />
       </Route>
 
         {/* Main Routes */}
