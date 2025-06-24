@@ -1,11 +1,8 @@
-// File: src/App.jsx
-
 import "./assets/tailwind.css";
 import { Routes, Route} from "react-router-dom";
 
 
 // Admin imports
-
 import MainLayoutAdmin from './layouts/MainLayoutAdmin';
 import DashboardAdmin from './pages/DashboardAdmin';
 import Program from "./component/DashboardAdmin/Program";
