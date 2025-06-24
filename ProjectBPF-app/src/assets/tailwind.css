@@ -1,1 +1,44 @@
 @import "tailwindcss";
+:root {
+    /* Font */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Lato', sans-serif;
+
+    /* Warna */
+    --color-cream: #FDF6E3;
+    --color-coffee-dark: #432818;
+    --color-primary: #D97706; 
+    --color-accent: #99582A;
+}
+body {
+    background-color: var(--color-cream);
+    color: var(--color-coffee-dark);
+    font-family: var(--font-body);
+}
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+.font-body {
+    font-family: var(--font-body);
+}
+
+.bg-primary {
+    background-color: var(--color-primary);
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
+
+.border-primary {
+    border-color: var(--color-primary);
+}
+
+.bg-accent {
+    background-color: var(--color-accent);
+}
+
+.text-coffee-dark {
+    color: var(--color-coffee-dark);
+}
