@@ -99,7 +99,7 @@ export default function ArtikelManager() {
     <div>
       <PageHeader title="Manajemen Artikel" breadcrumb={["Admin", "Artikel"]}>
         <button
-          onClick={() => window.location.href = "/"}
+          onClick={() => window.location.href = "/dashboardadmin"}
           className="bg-gray-600 text-white px-4 py-2 rounded-lg text-l"
         >
           Kembali

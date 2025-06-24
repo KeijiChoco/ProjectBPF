@@ -97,7 +97,7 @@ export default function FAQManager() {
     <div>
       <PageHeader title="Manajemen FAQ" breadcrumb={["Admin", "FAQ"]}>
         <button
-          onClick={() => window.location.href = "/"}
+          onClick={() => window.location.href = "/dashboardadmin"}
           className="bg-gray-600 text-white px-4 py-2 rounded-lg text-l"
         >
           Kembali
