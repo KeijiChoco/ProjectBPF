@@ -1,22 +1,22 @@
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
-import { programAPI } from "../../services/programAPI";
-import PageHeader from "../../component/PageHeader";
+import { artikelAPI } from "../../services/artikelAPI";
+import PageHeader from "../PageHeader";
 import { useState, useEffect } from "react";
-import AlertBox from "../../component/AlertBox";
-import GenericTable from "../../component/GenericTable";
-import EmptyState from "../../component/EmptyState";
-import LoadingSpinner from "../../component/LoadingSpinner";
+import AlertBox from "../AlertBox";
+import GenericTable from "../GenericTable";
+import EmptyState from "../EmptyState";
+import LoadingSpinner from "../LoadingSpinner";
 
-export default function ProgramManager() {
+export default function ArtikelManager() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [programs, setPrograms] = useState([]);
+  const [artikels, setArtikels] = useState([]);
 
   const [form, setForm] = useState({
-    judulprogram: "",
-    deskripsiprogram: "",
-    gambar: "",
+    judulartikel: "",
+    deskripsiartikel: "",
+    gambarartikel: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -34,18 +34,17 @@ export default function ProgramManager() {
       setSuccess("");
 
       if (editMode && editId !== null) {
-        await programAPI.updateProgram(editId, form);
-        setSuccess("Program berhasil diperbarui!");
+        await artikelAPI.updateArtikel(editId, form);
+        setSuccess("Artikel berhasil diperbarui!");
       } else {
-        await programAPI.createProgram(form);
-        setSuccess("Program berhasil ditambahkan!");
+        await artikelAPI.createArtikel(form);
+        setSuccess("Artikel berhasil ditambahkan!");
       }
 
-      setForm({ judulprogram: "", deskripsiprogram: "", gambar: "" });
+      setForm({ judulartikel: "", deskripsiartikel: "", gambarartikel: "" });
       setEditMode(false);
       setEditId(null);
-      loadPrograms();
-
+      loadArtikels();
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(`Terjadi kesalahan: ${err.message}`);
@@ -54,27 +53,27 @@ export default function ProgramManager() {
     }
   };
 
-  const loadPrograms = async () => {
+  const loadArtikels = async () => {
     try {
       setLoading(true);
       setError("");
-      const data = await programAPI.fetchProgram();
-      setPrograms(data);
+      const data = await artikelAPI.fetchArtikel();
+      setArtikels(data);
     } catch (err) {
-      setError("Gagal memuat data program.");
+      setError("Gagal memuat data artikel.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    const konfirmasi = confirm("Yakin ingin menghapus program ini?");
+    const konfirmasi = confirm("Yakin ingin menghapus artikel ini?");
     if (!konfirmasi) return;
 
     try {
       setLoading(true);
-      await programAPI.deleteProgram(id);
-      loadPrograms();
+      await artikelAPI.deleteArtikel(id);
+      loadArtikels();
     } catch (err) {
       setError(`Gagal menghapus: ${err.message}`);
     } finally {
@@ -86,19 +85,19 @@ export default function ProgramManager() {
     setEditMode(true);
     setEditId(item.id);
     setForm({
-      judulprogram: item.judulprogram,
-      deskripsiprogram: item.deskripsiprogram,
-      gambar: item.gambar,
+      judulartikel: item.judulartikel,
+      deskripsiartikel: item.deskripsiartikel,
+      gambarartikel: item.gambarartikel,
     });
   };
 
   useEffect(() => {
-    loadPrograms();
+    loadArtikels();
   }, []);
 
   return (
     <div>
-      <PageHeader title="Manajemen Program" breadcrumb={["Admin", "Program"]}>
+      <PageHeader title="Manajemen Artikel" breadcrumb={["Admin", "Artikel"]}>
         <button
           onClick={() => window.location.href = "/"}
           className="bg-gray-600 text-white px-4 py-2 rounded-lg text-l"
@@ -108,30 +107,30 @@ export default function ProgramManager() {
       </PageHeader>
 
       <div className="max-w-2xl mx-auto p-6">
-        <h2 className="text-3xl font-bold text-[#4e342e] mb-6">Program</h2>
+        <h2 className="text-3xl font-bold text-[#4e342e] mb-6">Artikel</h2>
 
         {error && <AlertBox type="error">{error}</AlertBox>}
         {success && <AlertBox type="success">{success}</AlertBox>}
 
         <div className="bg-white p-6 rounded-2xl shadow-md mb-6">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            {editMode ? "Edit Program" : "Tambah Program"}
+            {editMode ? "Edit Artikel" : "Tambah Artikel"}
           </h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
-              name="judulprogram"
-              placeholder="Judul Program"
-              value={form.judulprogram}
+              name="judulartikel"
+              placeholder="Judul Artikel"
+              value={form.judulartikel}
               onChange={handleChange}
               className="w-full p-3 rounded border"
               required
             />
             <textarea
-              name="deskripsiprogram"
-              placeholder="Deskripsi"
-              value={form.deskripsiprogram}
+              name="deskripsiartikel"
+              placeholder="Deskripsi Artikel"
+              value={form.deskripsiartikel}
               onChange={handleChange}
               className="w-full p-3 rounded border"
               rows="3"
@@ -139,9 +138,9 @@ export default function ProgramManager() {
             />
             <input
               type="url"
-              name="gambar"
+              name="gambarartikel"
               placeholder="Link Gambar (URL)"
-              value={form.gambar}
+              value={form.gambarartikel}
               onChange={handleChange}
               className="w-full p-3 rounded border"
               required
@@ -160,7 +159,7 @@ export default function ProgramManager() {
                   onClick={() => {
                     setEditMode(false);
                     setEditId(null);
-                    setForm({ judulprogram: "", deskripsiprogram: "", gambar: "" });
+                    setForm({ judulartikel: "", deskripsiartikel: "", gambarartikel: "" });
                   }}
                   className="bg-gray-400 px-5 py-2 text-white rounded hover:bg-gray-500"
                 >
@@ -172,25 +171,29 @@ export default function ProgramManager() {
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-lg font-semibold mb-4">Daftar Program ({programs.length})</h3>
+          <h3 className="text-lg font-semibold mb-4">Daftar Artikel ({artikels.length})</h3>
 
           {loading && <LoadingSpinner text="Memuat data..." />}
-          {!loading && programs.length === 0 && !error && (
-            <EmptyState text="Belum ada program yang ditambahkan." />
+          {!loading && artikels.length === 0 && !error && (
+            <EmptyState text="Belum ada artikel yang ditambahkan." />
           )}
-          {!loading && programs.length > 0 && (
+          {!loading && artikels.length > 0 && (
             <GenericTable
               columns={["#", "Judul", "Deskripsi", "Gambar", "Aksi"]}
-              data={programs}
+              data={artikels}
               renderRow={(item, index) => (
                 <>
                   <td className="px-6 py-4">{index + 1}</td>
-                  <td className="px-6 py-4 font-semibold text-[#6f4e37]">{item.judulprogram}</td>
-                  <td className="px-6 py-4">{item.deskripsiprogram}</td>
+                  <td className="px-6 py-4 font-semibold text-[#6f4e37]">{item.judulartikel}</td>
+                  <td className="px-6 py-4">{item.deskripsiartikel}</td>
                   <td className="px-6 py-4">
                     <img
-                      src={item.gambar}
-                      alt="gambar program"
+                      src={item.gambarartikel}
+                      alt="gambar artikel"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://via.placeholder.com/100x60?text=No+Image";
+                      }}
                       className="w-20 h-12 object-cover rounded shadow"
                     />
                   </td>

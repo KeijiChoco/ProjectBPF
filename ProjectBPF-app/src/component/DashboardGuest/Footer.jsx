@@ -2,17 +2,37 @@
 
 import React from 'react';
 
-export default function Footer() {
-    return (
-        // Menggunakan warna gelap untuk kontras
-        // 'p-4' untuk padding dan 'text-center' untuk menengahkan teks
-        <footer className="bg-slate-800 text-white p-4 text-center">
-            
-            {/* &copy; akan menampilkan simbol copyright (©) */}
-            <p className="text-sm text-gray-300">
-                &copy; {new Date().getFullYear()} Project BPF. All Rights Reserved.
-            </p>
+// Kita bisa definisikan style untuk link di sini agar tidak berulang
+const footerLinkStyle = { 
+  color: 'var(--color-cream)', 
+  opacity: 0.8 
+};
+const footerLinkHoverStyle = "hover:opacity-100 hover:underline transition-opacity";
 
-        </footer>
-    );
+export default function Footer() {
+  return (
+    <footer
+      style={{ backgroundColor: 'var(--color-coffee-dark)' }}
+      className="p-4"
+    >
+      <div className="container mx-auto flex justify-between items-center text-sm">
+        
+        {/* Kiri: Copyright */}
+        <p style={{ color: 'var(--color-cream)', opacity: 0.6 }}>
+          &copy; {new Date().getFullYear()} FAF Grind & Learn. All Rights Reserved.
+        </p>
+
+        {/* Kanan: Link Tambahan */}
+        <div className="flex space-x-6">
+          <a href="/privacy-policy" style={footerLinkStyle} className={footerLinkHoverStyle}>
+            Privacy Policy
+          </a>
+          <a href="/terms-of-service" style={footerLinkStyle} className={footerLinkHoverStyle}>
+            Terms of Service
+          </a>
+        </div>
+
+      </div>
+    </footer>
+  );
 }

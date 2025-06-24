@@ -1,22 +1,21 @@
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
-import { programAPI } from "../../services/programAPI";
-import PageHeader from "../../component/PageHeader";
+import { faqAPI } from "../../services/faqAPI";
+import PageHeader from "../PageHeader";
 import { useState, useEffect } from "react";
-import AlertBox from "../../component/AlertBox";
-import GenericTable from "../../component/GenericTable";
-import EmptyState from "../../component/EmptyState";
-import LoadingSpinner from "../../component/LoadingSpinner";
+import AlertBox from "../AlertBox";
+import GenericTable from "../GenericTable";
+import EmptyState from "../EmptyState";
+import LoadingSpinner from "../LoadingSpinner";
 
-export default function ProgramManager() {
+export default function FAQManager() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [programs, setPrograms] = useState([]);
+  const [faqs, setFaqs] = useState([]);
 
   const [form, setForm] = useState({
-    judulprogram: "",
-    deskripsiprogram: "",
-    gambar: "",
+    pertanyaan: "",
+    jawaban: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -34,18 +33,17 @@ export default function ProgramManager() {
       setSuccess("");
 
       if (editMode && editId !== null) {
-        await programAPI.updateProgram(editId, form);
-        setSuccess("Program berhasil diperbarui!");
+        await faqAPI.updateFaq(editId, form);
+        setSuccess("FAQ berhasil diperbarui!");
       } else {
-        await programAPI.createProgram(form);
-        setSuccess("Program berhasil ditambahkan!");
+        await faqAPI.createFaq(form);
+        setSuccess("FAQ berhasil ditambahkan!");
       }
 
-      setForm({ judulprogram: "", deskripsiprogram: "", gambar: "" });
+      setForm({ pertanyaan: "", jawaban: "" });
       setEditMode(false);
       setEditId(null);
-      loadPrograms();
-
+      loadFAQs();
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(`Terjadi kesalahan: ${err.message}`);
@@ -54,27 +52,27 @@ export default function ProgramManager() {
     }
   };
 
-  const loadPrograms = async () => {
+  const loadFAQs = async () => {
     try {
       setLoading(true);
       setError("");
-      const data = await programAPI.fetchProgram();
-      setPrograms(data);
+      const data = await faqAPI.fetchFaq();
+      setFaqs(data);
     } catch (err) {
-      setError("Gagal memuat data program.");
+      setError("Gagal memuat data FAQ.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    const konfirmasi = confirm("Yakin ingin menghapus program ini?");
+    const konfirmasi = confirm("Yakin ingin menghapus FAQ ini?");
     if (!konfirmasi) return;
 
     try {
       setLoading(true);
-      await programAPI.deleteProgram(id);
-      loadPrograms();
+      await faqAPI.deleteFaq(id);
+      loadFAQs();
     } catch (err) {
       setError(`Gagal menghapus: ${err.message}`);
     } finally {
@@ -86,19 +84,18 @@ export default function ProgramManager() {
     setEditMode(true);
     setEditId(item.id);
     setForm({
-      judulprogram: item.judulprogram,
-      deskripsiprogram: item.deskripsiprogram,
-      gambar: item.gambar,
+      pertanyaan: item.pertanyaan,
+      jawaban: item.jawaban,
     });
   };
 
   useEffect(() => {
-    loadPrograms();
+    loadFAQs();
   }, []);
 
   return (
     <div>
-      <PageHeader title="Manajemen Program" breadcrumb={["Admin", "Program"]}>
+      <PageHeader title="Manajemen FAQ" breadcrumb={["Admin", "FAQ"]}>
         <button
           onClick={() => window.location.href = "/"}
           className="bg-gray-600 text-white px-4 py-2 rounded-lg text-l"
@@ -108,42 +105,33 @@ export default function ProgramManager() {
       </PageHeader>
 
       <div className="max-w-2xl mx-auto p-6">
-        <h2 className="text-3xl font-bold text-[#4e342e] mb-6">Program</h2>
+        <h2 className="text-3xl font-bold text-[#4e342e] mb-6">FAQ</h2>
 
         {error && <AlertBox type="error">{error}</AlertBox>}
         {success && <AlertBox type="success">{success}</AlertBox>}
 
         <div className="bg-white p-6 rounded-2xl shadow-md mb-6">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            {editMode ? "Edit Program" : "Tambah Program"}
+            {editMode ? "Edit FAQ" : "Tambah FAQ"}
           </h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
-              name="judulprogram"
-              placeholder="Judul Program"
-              value={form.judulprogram}
+              name="pertanyaan"
+              placeholder="Pertanyaan"
+              value={form.pertanyaan}
               onChange={handleChange}
               className="w-full p-3 rounded border"
               required
             />
             <textarea
-              name="deskripsiprogram"
-              placeholder="Deskripsi"
-              value={form.deskripsiprogram}
+              name="jawaban"
+              placeholder="Jawaban"
+              value={form.jawaban}
               onChange={handleChange}
               className="w-full p-3 rounded border"
-              rows="3"
-              required
-            />
-            <input
-              type="url"
-              name="gambar"
-              placeholder="Link Gambar (URL)"
-              value={form.gambar}
-              onChange={handleChange}
-              className="w-full p-3 rounded border"
+              rows="4"
               required
             />
 
@@ -160,7 +148,7 @@ export default function ProgramManager() {
                   onClick={() => {
                     setEditMode(false);
                     setEditId(null);
-                    setForm({ judulprogram: "", deskripsiprogram: "", gambar: "" });
+                    setForm({ pertanyaan: "", jawaban: "" });
                   }}
                   className="bg-gray-400 px-5 py-2 text-white rounded hover:bg-gray-500"
                 >
@@ -172,28 +160,21 @@ export default function ProgramManager() {
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-lg font-semibold mb-4">Daftar Program ({programs.length})</h3>
+          <h3 className="text-lg font-semibold mb-4">Daftar FAQ ({faqs.length})</h3>
 
           {loading && <LoadingSpinner text="Memuat data..." />}
-          {!loading && programs.length === 0 && !error && (
-            <EmptyState text="Belum ada program yang ditambahkan." />
+          {!loading && faqs.length === 0 && !error && (
+            <EmptyState text="Belum ada FAQ yang ditambahkan." />
           )}
-          {!loading && programs.length > 0 && (
+          {!loading && faqs.length > 0 && (
             <GenericTable
-              columns={["#", "Judul", "Deskripsi", "Gambar", "Aksi"]}
-              data={programs}
+              columns={["#", "Pertanyaan", "Jawaban", "Aksi"]}
+              data={faqs}
               renderRow={(item, index) => (
                 <>
                   <td className="px-6 py-4">{index + 1}</td>
-                  <td className="px-6 py-4 font-semibold text-[#6f4e37]">{item.judulprogram}</td>
-                  <td className="px-6 py-4">{item.deskripsiprogram}</td>
-                  <td className="px-6 py-4">
-                    <img
-                      src={item.gambar}
-                      alt="gambar program"
-                      className="w-20 h-12 object-cover rounded shadow"
-                    />
-                  </td>
+                  <td className="px-6 py-4 font-semibold text-[#6f4e37]">{item.pertanyaan}</td>
+                  <td className="px-6 py-4">{item.jawaban}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-3">
                       <button onClick={() => handleEdit(item)}>

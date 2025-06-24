@@ -1,15 +1,16 @@
 import { Outlet } from "react-router-dom";
-// Path disesuaikan dengan struktur folder Anda
-import Header from "../component/DashboardGuest/Header"; 
+// Path ini mungkin perlu Anda sesuaikan lagi jika berbeda
+import Header from "../component/DashboardGuest/Header";
 import Footer from "../component/DashboardGuest/Footer";
 
 export default function MainLayoutGuest(){
     return (
-        <div className="bg-gray-100 min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col">
             
             <Header />
 
-            <main className="flex-1 p-4 overflow-y-auto">
+            {/* Tambahkan padding-top di sini untuk memberi ruang bagi header */}
+            <main className="flex-1 p-4 pt-28"> {/* <-- UBAH DI SINI */}
                 <Outlet /> 
             </main>
 

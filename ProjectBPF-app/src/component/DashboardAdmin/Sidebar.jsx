@@ -1,7 +1,9 @@
-// src/components/Sidebar.jsx
+import { BsFillFileEarmarkPersonFill } from "react-icons/bs";
+import { MdQuestionAnswer, MdArticle } from "react-icons/md";
+import { RiPagesFill } from "react-icons/ri";
+import { FiGrid } from "react-icons/fi";
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FiGrid, FiBox } from 'react-icons/fi';
 
 function Sidebar() {
   const linkClass = ({ isActive }) =>
@@ -26,21 +28,27 @@ function Sidebar() {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/crudaboutus" className={linkClass}>
+              <BsFillFileEarmarkPersonFill size={18} />
+              <span>About Us</span>
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/crudprogram" className={linkClass}>
-              <FiBox size={18} />
-              <span>Manajemen Program</span>
+              <RiPagesFill size={18} />
+              <span>Program</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/crudartikel" className={linkClass}>
-              <FiBox size={18} />
-              <span>Manajemen Artikel</span>
+              <MdArticle size={18} />
+              <span>Artikel</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/crudfaq" className={linkClass}>
-              <FiBox size={18} />
-              <span>Manajemen FAQ</span>
+              <MdQuestionAnswer size={18} />
+              <span>FAQ</span>
             </NavLink>
           </li>
         </ul>
