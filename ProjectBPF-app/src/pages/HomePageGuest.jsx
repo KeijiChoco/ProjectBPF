@@ -4,7 +4,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 // Anda bisa mengganti URL gambar ini dengan gambar Anda sendiri
-const heroImage = "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+const heroImage = "https://i.pinimg.com/736x/83/ef/1a/83ef1ae2fd24fe2133aafe623986d83e.jpg";
 
 export default function HomePageGuest() {
   return (
@@ -13,7 +13,7 @@ export default function HomePageGuest() {
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-12">
 
         {/* Kolom Teks (Kiri) */}
-        <div className="md:w-1/2 text-center md:text-left">
+        <div className="text-center container mx-80 flex flex-col items-center px-6">
           <h1 
             className="text-4xl md:text-5xl font-bold font-heading text-coffee-dark leading-tight"
           >
@@ -37,14 +37,50 @@ export default function HomePageGuest() {
           </div>
         </div>
 
-        {/* Kolom Gambar (Kanan) */}
+        <div className="absolute left-5 top-1/2 -translate-y-1/2 space-y-5 hidden lg:block px-20">
+        <img
+          src="https://i.pinimg.com/736x/b0/16/30/b01630aaed17b8bb5402bd22bc2eabbc.jpg"
+          alt="left1"
+          className="rounded-full w-40 h-40 object-cover shadow-lg"
+        />
+        <img
+          src="https://i.pinimg.com/736x/6a/eb/08/6aeb088b1c5b5973181f3a656d9513f9.jpg"
+          alt="left2"
+          className="rounded-full w-60 h-60 object-cover shadow-lg"
+        />
+        <img
+          src="https://i.pinimg.com/736x/6a/d5/92/6ad592ec9f62fba917691281e679ac80.jpg"
+          alt="left3"
+          className="rounded-full w-50 h-50 object-cover shadow-lg"
+        />
+      </div>
+
+      <div className="absolute right-10 top-1/2 -translate-y-1/2 space-y-5 hidden lg:block">
+        <img
+          src="https://i.pinimg.com/736x/dd/a5/1b/dda51b00a87b2f6519b21553390fe5e8.jpg"
+          alt="right1"
+          className="rounded-full w-50 h-50 object-cover shadow-lg"
+        />
+        <img
+          src="https://i.pinimg.com/736x/5b/9a/1a/5b9a1a5ae6e8e9673f12642c336655d6.jpg"
+          alt="right2"
+          className="rounded-full w-60 h-60 object-cover shadow-lg"
+        />
+        <img
+          src="https://i.pinimg.com/736x/ea/82/df/ea82df375393b9980685116e440c1dc5.jpg"
+          alt="right3"
+          className="rounded-full w-40 h-40 object-cover shadow-lg"
+        />
+      </div>
+
+        {/* Kolom Gambar (Kanan)
         <div className="md:w-1/2">
           <img 
             src={heroImage} 
-            alt="Secangkir Kopi Latte Art" 
-            className="w-full h-auto rounded-lg shadow-xl"
+            alt="Secangkir Kopi" 
+            className="w-100 h-auto rounded-lg shadow-xl"
           />
-        </div>
+        </div> */}
 
       </div>
     </section>
