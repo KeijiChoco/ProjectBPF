@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-// Path ini mungkin perlu Anda sesuaikan lagi jika berbeda
 import Header from "../component/DashboardGuest/Header";
 import Footer from "../component/DashboardGuest/Footer";
 
