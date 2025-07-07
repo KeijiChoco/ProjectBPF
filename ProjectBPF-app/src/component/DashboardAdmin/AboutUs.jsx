@@ -95,7 +95,7 @@ export default function AboutUsManager() {
                   value={form.judul}
                   onChange={handleChange}
                   className="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-[#8d6e63]"
-                  required
+                  reSquired
                 />
               </div>
 
