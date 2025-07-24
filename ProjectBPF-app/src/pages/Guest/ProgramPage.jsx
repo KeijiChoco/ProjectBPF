@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 // Sesuaikan path ini dengan lokasi file programAPI.js Anda
-import { programAPI } from "../services/programAPI";
+import { programAPI } from "../../services/programAPI";
 
 export default function ProgramPage() {
   // 1. Siapkan state untuk menampung data, status loading, dan error

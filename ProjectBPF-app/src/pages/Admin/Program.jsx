@@ -1,10 +1,10 @@
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { programAPI } from "../../services/programAPI";
-import PageHeader from "../../component/PageHeader";
+import PageHeader from "../../components/PageHeader";
 import { useState, useEffect } from "react";
-import AlertBox from "../../component/AlertBox";
-import EmptyState from "../../component/EmptyState";
-import LoadingSpinner from "../../component/LoadingSpinner";
+import AlertBox from "../../components/AlertBox";
+import EmptyState from "../../components/EmptyState";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function ProgramManager() {
   const [loading, setLoading] = useState(false);

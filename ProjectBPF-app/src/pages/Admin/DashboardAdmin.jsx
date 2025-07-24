@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { artikelAPI } from '../services/artikelAPI';
-import { faqAPI } from '../services/faqAPI';
-import { programAPI } from '../services/programAPI';
+import { artikelAPI } from '../../services/artikelAPI';
+import { faqAPI } from '../../services/faqAPI';
+import { programAPI } from '../../services/programAPI';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MdArticle, MdHelpOutline, MdSchool, MdPeople, MdShoppingCart, MdAttachMoney, MdReport } from 'react-icons/md';

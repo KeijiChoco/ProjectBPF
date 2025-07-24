@@ -1,6 +1,8 @@
+// src/layouts/MainLayoutAdmin.jsx
+
 import { Outlet } from "react-router-dom";
-import Sidebar from "../component/DashboardAdmin/Sidebar";
-import Header from "../component/DashboardAdmin/Header";
+import Sidebar from "../components/DashboardAdmin/Sidebar";
+import Header from "../components/DashboardAdmin/Header";
 
 export default function MainLayoutAdmin(){
     return (
@@ -9,7 +11,6 @@ export default function MainLayoutAdmin(){
                 <Sidebar />
                 <div className="flex-1 p-4">
                     <Header />
-
                     <Outlet />
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { aboutusAPI } from "../services/aboutusAPI";
-import logo from "../assets/FAF Logo.png";
+import { aboutusAPI } from "../../services/aboutusAPI";
+import logo from "../../assets/FAF Logo.png";
 
 export default function AboutUsPage() {
   const [aboutuss, setAboutUs] = useState([]);

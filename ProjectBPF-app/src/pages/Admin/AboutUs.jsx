@@ -1,9 +1,9 @@
 import { AiFillEdit } from "react-icons/ai";
 import { aboutusAPI } from "../../services/aboutusAPI";
-import PageHeader from "../PageHeader";
+import PageHeader from "../../components/PageHeader";
 import { useState, useEffect } from "react";
-import AlertBox from "../AlertBox";
-import LoadingSpinner from "../LoadingSpinner";
+import AlertBox from "../../components/AlertBox";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function AboutUsManager() {
   const [loading, setLoading] = useState(false);

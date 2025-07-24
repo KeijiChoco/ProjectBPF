@@ -1,11 +1,11 @@
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { artikelAPI } from "../../services/artikelAPI";
-import PageHeader from "../PageHeader";
+import PageHeader from "../../components/PageHeader";
 import { useState, useEffect } from "react";
-import AlertBox from "../AlertBox";
-import GenericTable from "../GenericTable";
-import EmptyState from "../EmptyState";
-import LoadingSpinner from "../LoadingSpinner";
+import AlertBox from "../../components/AlertBox";
+import GenericTable from "../../components/GenericTable";
+import EmptyState from "../../components/EmptyState";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function ArtikelManager() {
   const [loading, setLoading] = useState(false);

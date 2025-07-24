@@ -1,45 +1,61 @@
+// src/App.jsx
+
 import "./assets/tailwind.css";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-
-// Admin imports
+// Layouts
 import MainLayoutAdmin from './layouts/MainLayoutAdmin';
-import DashboardAdmin from './pages/DashboardAdmin';
-import Program from "./component/DashboardAdmin/Program";
-import Artikel from "./component/DashboardAdmin/Artikel";
-import Faq from "./component/DashboardAdmin/Faq";
-import AboutUs from "./component/DashboardAdmin/AboutUs";
+import MainLayoutGuest from './layouts/MainLayoutGuest';
 
-// Guest imports
-import MainLayoutGuest from './layouts/MainLayoutGuest'; 
-import HomePageGuest from './pages/HomePageGuest';     
-import ProgramPage from './pages/ProgramPage';
-import FaqPage from './pages/FAQPage';
-import ArtikelPage from "./pages/ArtikelPage";
-import AboutUsPage from "./pages/AboutUsPage";
+// Protector
+import AdminRoute from './components/AdminRoute';
+
+// Admin Pages
+import DashboardAdmin from './pages/Admin/DashboardAdmin';
+import Program from "./pages/Admin/Program";
+import Artikel from "./pages/Admin/Artikel";
+import Faq from "./pages/Admin/Faq";
+import AboutUs from "./pages/Admin/AboutUs";
+import Users from "./pages/Admin/Users"; // <-- Impor halaman Users
+
+// Guest Pages
+import HomePageGuest from './pages/Guest/HomePageGuest';
+import ProgramPage from './pages/Guest/ProgramPage';
+import FaqPage from './pages/Guest/FAQPage';
+import ArtikelPage from "./pages/Guest/ArtikelPage";
+import AboutUsPage from "./pages/Guest/AboutUsPage";
+
+// Auth Page (jika diperlukan nanti)
+// import LoginPage from "./pages/LoginPage";
+
 function App() {
   return (
     <Routes>
-
-      {/* Guest Routes */}
+      {/* Rute Guest (Publik) */}
       <Route path="/guest" element={<MainLayoutGuest />}>
-        <Route index element={<HomePageGuest />} /> {/* Halaman utama /guest */}
+        <Route index element={<HomePageGuest />} />
         <Route path="program" element={<ProgramPage />} />
         <Route path="faq" element={<FaqPage />} />
         <Route path="artikel" element={<ArtikelPage />} />
         <Route path="about-us" element={<AboutUsPage />} />
       </Route>
 
-        {/* Main Routes */}
+      {/* Rute Admin yang Dilindungi (atau dibypass) */}
+      <Route element={<AdminRoute />}>
         <Route element={<MainLayoutAdmin />}>
           <Route path="/dashboardadmin" element={<DashboardAdmin />} />
           <Route path="/crudprogram" element={<Program />} />
           <Route path="/crudartikel" element={<Artikel />} />
           <Route path="/crudfaq" element={<Faq />} />
           <Route path="/crudaboutus" element={<AboutUs />} />
+          <Route path="/crudusers" element={<Users />} /> {/* <-- Tambahkan rute untuk Users */}
         </Route>
+      </Route>
+
+      {/* Rute Default, alihkan ke halaman guest */}
+      <Route path="/" element={<Navigate to="/guest" replace />} />
     </Routes>
-  )
+  );
 }
 
 export default App;

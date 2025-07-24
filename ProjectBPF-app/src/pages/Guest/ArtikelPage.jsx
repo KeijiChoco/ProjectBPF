@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { artikelAPI } from "../services/artikelAPI";
+import { artikelAPI } from "../../services/artikelAPI";
 
 export default function ArtikelPage() {
   const [artikels, setArtikels] = useState([]);
