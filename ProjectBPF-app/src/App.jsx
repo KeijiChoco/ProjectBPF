@@ -1,4 +1,4 @@
-// src/App.jsx - Alternative dengan mixed public/protected routes
+// src/App.jsx - Guest routes accessible without login
 
 import "./assets/tailwind.css";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -9,7 +9,6 @@ import MainLayoutGuest from './layouts/MainLayoutGuest';
 
 // Protectors & Guards
 import AdminRoute from './components/AdminRoute';
-import GuestRoute from './components/GuestRoute';
 import PublicRoute from './components/PublicRoute';
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 
@@ -65,17 +64,15 @@ function App() {
           <Route path="artikel" element={<ArtikelPage />} />
           <Route path="about-us" element={<AboutUsPage />} />
         </Route>
-      </Route>
-
-      {/* Protected Guest Routes - Perlu login untuk akses penuh */}
-      <Route element={<GuestRoute />}>
+        
+        {/* Guest Routes with Details - Accessible without login */}
         <Route path="/guest" element={<MainLayoutGuest />}>
           <Route index element={<HomePageGuest />} />
           <Route path="program" element={<ProgramPage />} />
+          <Route path="program/:id" element={<ProgramDetailPage />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="artikel" element={<ArtikelPage />} />
-          <Route path="/guest/program/:id" element={<ProgramDetailPage />} />
-          <Route path="/guest/artikel/:id" element={<ArtikelDetailPage />} />
+          <Route path="artikel/:id" element={<ArtikelDetailPage />} />
           <Route path="about-us" element={<AboutUsPage />} />
         </Route>
       </Route>
