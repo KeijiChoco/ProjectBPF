@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { feedbackAPI } from "../../api/feedbackAPI"; // pastikan path-nya sesuai struktur project-mu
 
 const emojis = [
   { label: "😊", bg: "/feedback/happy-card.png" },
@@ -10,6 +11,9 @@ const emojis = [
 const FeedbackSection = () => {
   const [selectedEmoji, setSelectedEmoji] = useState("😊");
   const [form, setForm] = useState({ name: "", feedback: "" });
+  const [loading, setLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleEmojiClick = (emoji) => {
     setSelectedEmoji(emoji);
@@ -19,11 +23,27 @@ const FeedbackSection = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simpan data feedback di sini
-    console.log("Feedback terkirim:", { ...form, emoji: selectedEmoji });
-    setForm({ name: "", feedback: "" });
+    setLoading(true);
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    const payload = {
+      ...form,
+      emoji: selectedEmoji,
+    };
+
+    try {
+      await feedbackAPI.createFeedback(payload);
+      setSuccessMsg("Feedback berhasil dikirim. Terima kasih!");
+      setForm({ name: "", feedback: "" });
+    } catch (error) {
+      console.error("Gagal mengirim feedback:", error);
+      setErrorMsg("Terjadi kesalahan saat mengirim feedback.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,9 +66,11 @@ const FeedbackSection = () => {
         <div className="w-full md:w-[60%] px-4">
           <motion.div
             className="relative w-full max-w-2xl mx-auto p-6 rounded-xl bg-cover bg-center shadow-lg"
-            style={{ backgroundImage: `url(${
-              emojis.find((e) => e.label === selectedEmoji)?.bg
-            })` }}
+            style={{
+              backgroundImage: `url(${
+                emojis.find((e) => e.label === selectedEmoji)?.bg
+              })`,
+            }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -93,10 +115,18 @@ const FeedbackSection = () => {
 
               <button
                 type="submit"
-                className="bg-[#432818] text-white px-6 py-2 mt-2 rounded-md self-start"
+                disabled={loading}
+                className="bg-[#432818] text-white px-6 py-2 mt-2 rounded-md self-start disabled:opacity-60"
               >
-                Kirim
+                {loading ? "Mengirim..." : "Kirim"}
               </button>
+
+              {successMsg && (
+                <p className="text-green-700 text-sm mt-2">{successMsg}</p>
+              )}
+              {errorMsg && (
+                <p className="text-red-600 text-sm mt-2">{errorMsg}</p>
+              )}
             </form>
           </motion.div>
         </div>

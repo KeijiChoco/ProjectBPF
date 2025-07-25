@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { programAPI } from '../../services/AllServices';
 import FeedbackSection from '../../components/DashboardGuest/Feedback';
+import FeedbackArea from './FeedbackArea';
+
 
 // Anda bisa mengganti URL gambar ini dengan gambar Anda sendiri
 const heroImage = "https://i.pinimg.com/736x/83/ef/1a/83ef1ae2fd24fe2133aafe623986d83e.jpg";
@@ -161,7 +163,7 @@ export default function HomePageGuest() {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-16 bg-coffee-dark text-white">
+      <section className="py-16 bg-coffee-dark text-black">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
@@ -268,17 +270,10 @@ export default function HomePageGuest() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold font-heading text-coffee-dark mb-4">
-              Apa Kata Alumni Kami?
-            </h2>
-          </div>
-        </div>
-      </section>
+          <FeedbackArea />
 
-      <FeedbackSection/>
+          {/* Komponen Feedback Section */}
+          <FeedbackSection />
     </div>
   );
 }

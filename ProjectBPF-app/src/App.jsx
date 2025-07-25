@@ -19,6 +19,7 @@ import Artikel from "./pages/Admin/Artikel";
 import Faq from "./pages/Admin/Faq";
 import AboutUs from "./pages/Admin/AboutUs";
 import Users from "./pages/Admin/Users";
+import Feedback from "./pages/Admin/Feedback";
 
 // Manager Pages
 import InstructorsManager from "./pages/Admin/InstructorsManager";
@@ -86,6 +87,7 @@ function App() {
           <Route path="/crudfaq" element={<Faq />} />
           <Route path="/crudaboutus" element={<AboutUs />} />
           <Route path="/crudusers" element={<Users />} />
+          <Route path="/feedbackuser" element={<Feedback />} />
           
           {/* Manager Routes */}
           <Route path="/instructors-manager" element={<InstructorsManager />} />
