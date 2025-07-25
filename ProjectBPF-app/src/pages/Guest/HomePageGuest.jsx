@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { programAPI } from '../../services/AllServices';
+import FeedbackSection from '../../components/DashboardGuest/Feedback';
 
 // Anda bisa mengganti URL gambar ini dengan gambar Anda sendiri
 const heroImage = "https://i.pinimg.com/736x/83/ef/1a/83ef1ae2fd24fe2133aafe623986d83e.jpg";
@@ -274,92 +275,10 @@ export default function HomePageGuest() {
               Apa Kata Alumni Kami?
             </h2>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <img 
-                  src="https://i.pinimg.com/736x/f1/2e/3d/f12e3d4c5b6a7e8f9a0b1c2d3e4f5a6b.jpg" 
-                  alt="Alumni 1" 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h4 className="font-bold">Sarah Melinda</h4>
-                  <p className="text-sm text-gray-600">Owner Café Aroma</p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic">"Pelatihan di FAF benar-benar mengubah cara saya memahami kopi. Sekarang café saya selalu ramai!"</p>
-              <div className="flex text-yellow-400 mt-3">
-                ⭐⭐⭐⭐⭐
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <img 
-                  src="https://i.pinimg.com/736x/c7/8d/9e/c78d9e0f1a2b3c4d5e6f7a8b9c0d1e2f.jpg" 
-                  alt="Alumni 2" 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h4 className="font-bold">Budi Santoso</h4>
-                  <p className="text-sm text-gray-600">Head Barista Hotel Mewah</p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic">"Instrukturnya sangat berpengalaman dan sabar. Saya bisa langsung praktik di tempat kerja!"</p>
-              <div className="flex text-yellow-400 mt-3">
-                ⭐⭐⭐⭐⭐
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <img 
-                  src="https://i.pinimg.com/736x/3b/4c/5d/3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e.jpg" 
-                  alt="Alumni 3" 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h4 className="font-bold">Maya Putri</h4>
-                  <p className="text-sm text-gray-600">Freelance Barista</p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic">"Sertifikat dari FAF membantu saya mendapat pekerjaan impian sebagai barista profesional!"</p>
-              <div className="flex text-yellow-400 mt-3">
-                ⭐⭐⭐⭐⭐
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Siap Memulai Perjalanan Barista Anda?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Bergabunglah dengan ratusan alumni yang telah sukses berkarir di industri kopi
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <NavLink
-              to="/guest/program"
-              className="bg-white text-primary font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Pilih Program
-            </NavLink>
-            <a
-              href="https://wa.me/62895601522474?text=Halo,%20saya%20ingin%20konsultasi%20tentang%20program%20barista"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-primary transition-colors"
-            >
-              Konsultasi Gratis
-            </a>
-          </div>
-        </div>
-      </section>
+      <FeedbackSection/>
     </div>
   );
 }

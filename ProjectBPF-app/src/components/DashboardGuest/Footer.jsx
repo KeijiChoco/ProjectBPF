@@ -36,6 +36,7 @@ export default function Footer() {
           </h2>
           <a
             href="https://pcr.ac.id/"
+            target="_blank"
             style={footerLinkStyle}
             className="hover:opacity-100 hover:underline transition-opacity"
           >
@@ -45,6 +46,7 @@ export default function Footer() {
           <a
             href="https://www.youtube.com/@PoliteknikCaltexRiauOfficial"
             style={footerLinkStyle}
+            target="_blank"
             className="hover:opacity-100 hover:underline transition-opacity"
           >
             Our Youtube
@@ -53,6 +55,7 @@ export default function Footer() {
           <a
             href="https://www.instagram.com/politeknikcaltexriau/"
             style={footerLinkStyle}
+            target="_blank"
             className="hover:opacity-100 hover:underline transition-opacity"
           >
             Our Instagram
@@ -68,6 +71,7 @@ export default function Footer() {
           <a
             href="https://www.instagram.com/bertttt11/"
             style={footerLinkStyle}
+            target="_blank"
             className="hover:opacity-100 hover:underline transition-opacity"
           >
             Albert's Instagram
@@ -76,6 +80,7 @@ export default function Footer() {
           <a
             href="https://www.instagram.com/frh_geaks/"
             style={footerLinkStyle}
+            target="_blank"
             className="hover:opacity-100 hover:underline transition-opacity"
           >
             Farizy's Instagram
@@ -84,6 +89,7 @@ export default function Footer() {
           <a
             href="http://instagram.com/febriana_tan/"
             style={footerLinkStyle}
+            target="_blank"
             className="hover:opacity-100 hover:underline transition-opacity"
           >
             Febriana's Instagram
