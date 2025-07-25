@@ -72,16 +72,6 @@ export default function HomePageGuest() {
           className="rounded-full w-40 h-40 object-cover shadow-lg"
         />
       </div>
-
-        {/* Kolom Gambar (Kanan)
-        <div className="md:w-1/2">
-          <img 
-            src={heroImage} 
-            alt="Secangkir Kopi" 
-            className="w-100 h-auto rounded-lg shadow-xl"
-          />
-        </div> */}
-
       </div>
     </section>
   );
