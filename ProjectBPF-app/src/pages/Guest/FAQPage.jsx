@@ -1,7 +1,7 @@
 // File: src/pages/FaqPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { faqAPI } from '../../services/faqAPI';
+import { faqAPI } from "../../services/AllServices";
 import { FaChevronDown } from 'react-icons/fa';
 
 export default function FaqPage() {

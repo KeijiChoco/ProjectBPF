@@ -1,24 +1,17 @@
-// File: src/pages/ProgramPage.jsx
-
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-// Sesuaikan path ini dengan lokasi file programAPI.js Anda
-import { programAPI } from "../../services/programAPI";
+import { programAPI } from "../../services/AllServices";
 
 export default function ProgramPage() {
-  // 1. Siapkan state untuk menampung data, status loading, dan error
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 2. Gunakan useEffect untuk mengambil data saat komponen pertama kali dimuat
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
         const data = await programAPI.fetchProgram();
-        // --- BARIS DEBUGGING DITAMBAHKAN DI SINI ---
         console.log("DATA YANG DITERIMA DARI SUPABASE:", data);
-        // -------------------------------------------
         setPrograms(data);
       } catch (err) {
         setError("Gagal memuat data program. Silakan coba lagi nanti.");
@@ -29,21 +22,23 @@ export default function ProgramPage() {
     };
 
     fetchPrograms();
-  }, []); // Array dependensi kosong berarti efek ini hanya berjalan sekali
+  }, []);
 
-  // 3. Tampilkan pesan loading saat data sedang diambil
   if (loading) {
-    return <div className="text-center p-10">Memuat program...</div>;
+    return (
+      <div className="text-center p-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coffee-dark mx-auto mb-4"></div>
+        <p>Memuat program untuk Anda...</p>
+      </div>
+    );
   }
 
-  // 4. Tampilkan pesan error jika terjadi kesalahan
   if (error) {
-    return <div className="text-center p-10 text-merah">{error}</div>;
+    return <div className="text-center p-10 text-red-500">{error}</div>;
   }
 
-  // 5. Jika berhasil, tampilkan daftar program dalam bentuk kartu (cards)
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 px-4">
       <h1 className="text-4xl font-bold font-heading text-center mb-10 text-coffee-dark">
         Program Pelatihan Kami
       </h1>
@@ -55,26 +50,43 @@ export default function ProgramPage() {
             className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:-translate-y-2"
           >
             <img
-              // UBAH DI SINI: dari program.url_gambar menjadi program.gambar
               src={
-                program.gambar ||
-                "https://placehold.co/600x400/FDF6E3/432818?text=FAF"
+                program.gambar_program_url ||
+                "https://placehold.co/600x400/FDF6E3/432818?text=Program+Kopi"
               }
-              alt={program.judulprogram} // Ganti juga alt textnya
+              alt={program.judul_program}
               className="w-full h-48 object-cover"
+              onError={(e) => {
+                e.target.src = "https://placehold.co/600x400/FDF6E3/432818?text=Program+Kopi";
+              }}
             />
             <div className="p-6">
-              <h2 className="text-2xl font-bold font-heading text-coffee-dark mb-2">
-                {/* UBAH DI SINI: dari program.nama_program menjadi program.judulprogram */}
-                {program.judulprogram}
-              </h2>
-              <p className="font-body text-gray-600 mb-4">
-                {/* UBAH DI SINI: dari program.deskripsi_singkat menjadi program.deskripsiprogram */}
-                {program.deskripsiprogram}
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-2xl font-bold font-heading text-coffee-dark">
+                  {program.judul_program}
+                </h2>
+                {program.level && (
+                  <span className="bg-coffee-light text-coffee-dark text-xs font-semibold px-2 py-1 rounded">
+                    {program.level}
+                  </span>
+                )}
+              </div>
+              
+              <p className="font-body text-gray-600 mb-4 line-clamp-3">
+                {program.deskripsi_program || "Deskripsi program belum tersedia."}
               </p>
+              
+              {program.harga && program.harga > 0 && (
+                <div className="mb-4">
+                  <span className="text-lg font-bold text-accent">
+                    Rp {new Intl.NumberFormat('id-ID').format(program.harga)}
+                  </span>
+                </div>
+              )}
+              
               <NavLink
                 to={`/guest/program/${program.id}`}
-                className="bg-accent text-white font-bold font-heading py-2 px-4 rounded-lg hover:opacity-90 transition-opacity inline-block"
+                className="bg-accent text-white font-bold font-heading py-2 px-4 rounded-lg hover:opacity-90 transition-opacity inline-block w-full text-center"
               >
                 Lihat Detail
               </NavLink>
@@ -82,6 +94,22 @@ export default function ProgramPage() {
           </div>
         ))}
       </div>
+
+      {programs.length === 0 && (
+        <div className="text-center py-16">
+          <div className="text-gray-400 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">
+            Belum Ada Program Tersedia
+          </h3>
+          <p className="text-gray-500">
+            Program pelatihan sedang dalam persiapan. Silakan kembali lagi nanti.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

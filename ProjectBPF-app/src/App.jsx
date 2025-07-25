@@ -33,6 +33,8 @@ import ProgramPage from './pages/Guest/ProgramPage';
 import FaqPage from './pages/Guest/FAQPage';
 import ArtikelPage from "./pages/Guest/ArtikelPage";
 import AboutUsPage from "./pages/Guest/AboutUsPage";
+import ArtikelDetailPage from './components/DashboardGuest/ArtikelDetailPage';
+import ProgramDetailPage from './components/DashboardGuest/ProgramDetailPage';
 
 // Auth Pages
 import LoginPage from "./pages/Auth/LoginPage";
@@ -72,6 +74,8 @@ function App() {
           <Route path="program" element={<ProgramPage />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="artikel" element={<ArtikelPage />} />
+          <Route path="/guest/program/:id" element={<ProgramDetailPage />} />
+          <Route path="/guest/artikel/:id" element={<ArtikelDetailPage />} />
           <Route path="about-us" element={<AboutUsPage />} />
         </Route>
       </Route>

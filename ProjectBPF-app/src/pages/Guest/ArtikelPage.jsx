@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { artikelAPI } from "../../services/artikelAPI";
+import { artikelAPI } from "../../services/AllServices";
 
 export default function ArtikelPage() {
   const [artikels, setArtikels] = useState([]);
@@ -49,10 +49,10 @@ export default function ArtikelPage() {
             {/* Gambar di kiri */}
             <img
               src={
-                artikel.gambarartikel ||
+                artikel.gambar_artikel_url ||
                 "https://placehold.co/600x400/FDF6E3/432818?text=FAF"
               }
-              alt={artikel.judulartikel}
+              alt={artikel.judul_artikel}
               className="w-full md:w-64 h-48 md:h-auto object-cover"
             />
 
@@ -61,20 +61,21 @@ export default function ArtikelPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-xl font-bold font-heading text-coffee-dark mb-2">
-                    {artikel.judulartikel}
+                    {artikel.judul_artikel}
                   </h2>
                   <p className="text-gray-700 text-sm">
-                    {artikel.deskripsiartikel}
+                    {artikel.deskripsi_artikel}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Dibuat: {new Date(artikel.created_at).toLocaleDateString('id-ID')}
                   </p>
                 </div>
-
-                {/* Tombol kanan atas (optional), bisa dipindah ke bawah */}
               </div>
 
               {/* Tombol kanan bawah */}
               <div className="flex justify-end mt-4">
                 <NavLink
-                  to={`/guest/program/${artikel.id}`}
+                  to={`/guest/artikel/${artikel.id}`}
                   className="bg-accent text-white font-semibold py-2 px-4 rounded hover:opacity-90 transition"
                 >
                   Baca Selengkapnya
