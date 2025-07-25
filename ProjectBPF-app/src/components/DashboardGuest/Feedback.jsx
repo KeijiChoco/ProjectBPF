@@ -2,108 +2,113 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 const emojis = [
-  { label: "😊", bg: "/Excited.png" },
+  { label: "😊", bg: "/feedback/happy-card.png" },
   { label: "😐", bg: "/feedback/neutral-card.png" },
   { label: "😔", bg: "/feedback/sad-card.png" },
 ];
 
 const FeedbackSection = () => {
-  const [selectedEmoji, setSelectedEmoji] = useState(null);
-  const [name, setName] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const [selectedEmoji, setSelectedEmoji] = useState("😊");
+  const [form, setForm] = useState({ name: "", feedback: "" });
+
+  const handleEmojiClick = (emoji) => {
+    setSelectedEmoji(emoji);
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simpan atau kirim feedback di sini
-    console.log("Feedback submitted:", {
-      name,
-      feedback,
-      emoji: selectedEmoji,
-    });
-    // Reset form
-    setName("");
-    setFeedback("");
-    setSelectedEmoji(null);
+    // Simpan data feedback di sini
+    console.log("Feedback terkirim:", { ...form, emoji: selectedEmoji });
+    setForm({ name: "", feedback: "" });
   };
 
   return (
-    <section className="container mx-auto flex flex-col items-center rounded-2xl shadow-xl py-16 px-6 bg-[#fdf9f5]">
-      <h2 className="text-4xl font-bold text-center text-coffee-dark mb-10">
+    <section className="w-full py-12 bg-gradient-to-b from-[#FFF8F0] to-[#FFFBEF]">
+      <h2 className="text-3xl font-bold text-center mb-8 text-[#432818]">
         Tinggalkan Feedbackmu!
       </h2>
 
-      <div className="flex flex-col md:flex-row items-start justify-center gap-10">
-        {/* Emoji Selector - Vertical */}
-        <div className="flex md:flex-col gap-4 items-center">
-          {emojis.map((emoji, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedEmoji(emoji)}
-              className={`text-4xl transition hover:scale-110 ${
-                selectedEmoji?.label === emoji.label
-                  ? "ring-2 ring-coffee-dark rounded-full"
-                  : ""
-              }`}
-            >
-              {emoji.label}
-            </button>
-          ))}
+      <div className="w-full flex">
+        {/* Kiri */}
+        <div className="w-[20%] hidden md:block">
+          <img
+            src="https://i.pinimg.com/736x/9a/28/6d/9a286de96bb6f4c277bdc058ffbeea87.jpg"
+            alt="Kiri"
+            className="w-full h-full object-cover"
+          />
         </div>
 
-        {/* Form Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative w-[6in] h-[4in] bg-white rounded-xl shadow-lg overflow-hidden"
-        >
-          {/* Background Image */}
-          {selectedEmoji && (
-            <img
-              src={selectedEmoji.bg}
-              alt="Feedback Card"
-              className="absolute inset-0 w-full h-full object-cover opacity-70"
-            />
-          )}
-
-          {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="relative z-10 h-full flex flex-col justify-between p-6"
+        {/* Tengah */}
+        <div className="w-full md:w-[60%] px-4">
+          <motion.div
+            className="relative w-full max-w-2xl mx-auto p-6 rounded-xl bg-cover bg-center shadow-lg"
+            style={{ backgroundImage: `url(${
+              emojis.find((e) => e.label === selectedEmoji)?.bg
+            })` }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <div>
-              <label className="block mb-1 font-semibold text-coffee-dark">
-                Nama
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full p-2 rounded-md bg-white bg-opacity-80 backdrop-blur-sm border border-coffee-light mb-4"
-              />
-
-              <label className="block mb-1 font-semibold text-coffee-dark">
-                Feedback
-              </label>
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                required
-                rows={3}
-                className="w-full p-2 rounded-md bg-white bg-opacity-80 backdrop-blur-sm border border-coffee-light"
-              ></textarea>
+            {/* Emoji Vertikal */}
+            <div className="absolute left-[-60px] top-8 hidden md:flex flex-col gap-4">
+              {emojis.map((emoji, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleEmojiClick(emoji.label)}
+                  className={`rounded-full p-1 ${
+                    selectedEmoji === emoji.label
+                      ? "ring-2 ring-[#432818]"
+                      : "ring-0"
+                  }`}
+                >
+                  <span className="text-2xl">{emoji.label}</span>
+                </button>
+              ))}
             </div>
 
-            <button
-              type="submit"
-              className="self-end mt-4 px-6 py-2 rounded-md transition font-semibold text-white"
-              style={{ backgroundColor: "#432818" }}
-            >
-              Kirim
-            </button>
-          </form>
-        </motion.div>
+            <form className="flex flex-col gap-4 mt-4" onSubmit={handleSubmit}>
+              <label className="text-[#432818] font-semibold">Nama</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                className="p-2 rounded-md border focus:outline-none"
+                required
+              />
+
+              <label className="text-[#432818] font-semibold">Feedback</label>
+              <textarea
+                name="feedback"
+                value={form.feedback}
+                onChange={handleChange}
+                rows={4}
+                className="p-2 rounded-md border resize-none focus:outline-none"
+                required
+              />
+
+              <button
+                type="submit"
+                className="bg-[#432818] text-white px-6 py-2 mt-2 rounded-md self-start"
+              >
+                Kirim
+              </button>
+            </form>
+          </motion.div>
+        </div>
+
+        {/* Kanan */}
+        <div className="w-[20%] hidden md:block">
+          <img
+            src="https://i.pinimg.com/736x/85/3e/14/853e14816d26f88c89ded51e89734c6a.jpg"
+            alt="Kanan"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
     </section>
   );
