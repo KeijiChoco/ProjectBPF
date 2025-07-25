@@ -26,6 +26,7 @@ function Sidebar() {
     { to: "/crudaboutus", icon: <BsFillFileEarmarkPersonFill size={20} />, label: "About Us" },
     { to: "/crudprogram", icon: <RiPagesFill size={20} />, label: "Program" },
     { to: "/crudartikel", icon: <MdArticle size={20} />, label: "Artikel" },
+    { to: "/feedbackuser", icon: <MdArticle size={20} />, label: "Feedback" },
     { to: "/crudfaq", icon: <MdQuestionAnswer size={20} />, label: "FAQ" },
     { to: "/crudusers", icon: <BsPeopleFill size={20} />, label: "Users" },
     // Menu Manager baru
