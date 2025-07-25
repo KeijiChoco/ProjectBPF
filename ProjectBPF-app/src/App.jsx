@@ -10,6 +10,7 @@ import MainLayoutGuest from './layouts/MainLayoutGuest';
 // Protectors & Guards
 import AdminRoute from './components/AdminRoute';
 import PublicRoute from './components/PublicRoute';
+import GuestRoute from './components/GuestRoute';
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 
 // Admin Pages
@@ -64,7 +65,8 @@ function App() {
           <Route path="artikel" element={<ArtikelPage />} />
           <Route path="about-us" element={<AboutUsPage />} />
         </Route>
-        
+
+        \
         {/* Guest Routes with Details - Accessible without login */}
         <Route path="/guest" element={<MainLayoutGuest />}>
           <Route index element={<HomePageGuest />} />
