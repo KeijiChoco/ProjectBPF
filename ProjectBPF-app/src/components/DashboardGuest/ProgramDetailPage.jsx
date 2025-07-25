@@ -286,12 +286,14 @@ export default function ProgramDetailPage() {
         >
           Lihat Program Lainnya
         </NavLink>
-        <NavLink
-          to="/contact"
-          className="bg-accent text-white font-semibold py-3 px-8 rounded-lg hover:opacity-90 transition"
-        >
-          Hubungi Kami
-        </NavLink>
+        <a
+  href="https://wa.me/62895601522474?text=Halo,%20saya%20ingin%20mengikuti%20program%20ini"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-accent text-white font-semibold py-3 px-8 rounded-lg hover:opacity-90 transition"
+>
+  Hubungi Kami
+</a>
       </div>
     </div>
   );

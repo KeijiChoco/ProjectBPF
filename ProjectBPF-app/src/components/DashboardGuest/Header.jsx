@@ -79,6 +79,9 @@ export default function Header() {
 
         {/* Tengah: Link Navigasi Utama */}
         <nav className="flex items-center space-x-8">
+          <NavLink to="/guest/home" className={navLinkStyles}>
+            Home
+          </NavLink>
           <NavLink to="/guest/program" className={navLinkStyles}>
             Program
           </NavLink>
