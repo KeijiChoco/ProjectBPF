@@ -1,36 +1,39 @@
-import React from "react";
+// src/components/PageHeader.jsx
 
-export default function PageHeader({ title, breadcrumb, children }) {
-    const renderBreadcrumb = () => {
-        if (typeof breadcrumb === "string") {
-            return <span className="text-gray-500">{breadcrumb}</span>;
-        }
+import React from 'react';
+import { FiChevronRight, FiHome } from 'react-icons/fi';
 
-        if (Array.isArray(breadcrumb)) {
-            return breadcrumb.map((item, index) => (
-                <div key={index} className="flex items-center text-gray-500">
-                    {index > 0 && <span className="mx-1">/</span>}
-                    <span>{item}</span>
-                </div>
-            ));
-        }
-
-        return null;
-    };
-
-    return (
-        <div className="flex items-center justify-between p-4">
-            <div className="flex flex-col">
-                <span className="text-3xl font-semibold">
-                    {title}
-                </span>
-                <div className="flex items-center font-medium space-x-2 mt-2">
-                    {renderBreadcrumb()}
-                </div>
+const PageHeader = ({ title, breadcrumb = [], children }) => {
+  return (
+    <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-6">
+          {/* Left side - Title and Breadcrumb */}
+          <div>
+            <div className="flex items-center text-sm text-gray-500 mb-2">
+              <FiHome className="mr-2" />
+              {breadcrumb.map((item, index) => (
+                <React.Fragment key={index}>
+                  <span className="hover:text-gray-700 cursor-pointer">
+                    {item}
+                  </span>
+                  {index < breadcrumb.length - 1 && (
+                    <FiChevronRight className="mx-2 text-gray-400" size={14} />
+                  )}
+                </React.Fragment>
+              ))}
             </div>
-            <div className="flex space-x-2">
-                {children}
-            </div>
+            <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          </div>
+
+          {/* Right side - Action buttons */}
+          <div className="flex items-center gap-3">
+            {children}
+          </div>
         </div>
-    );
-}
+      </div>
+    </div>
+  );
+};
+
+export default PageHeader;

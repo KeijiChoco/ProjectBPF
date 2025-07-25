@@ -114,7 +114,7 @@ export default function Footer() {
           <br />
           <a
             href="/guest/faq"
-            style={footerLinkStyle}s
+            style={footerLinkStyle}
             className="hover:opacity-100 hover:underline transition-opacity"
           >
             FAQ

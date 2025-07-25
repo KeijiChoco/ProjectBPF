@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { BsFillFileEarmarkPersonFill, BsPeopleFill } from "react-icons/bs";
 import { MdQuestionAnswer, MdArticle } from "react-icons/md";
 import { RiPagesFill } from "react-icons/ri";
-import { FiGrid } from "react-icons/fi";
+import { FiGrid, FiLogOut, FiUsers, FiCalendar, FiUserCheck, FiClipboard } from "react-icons/fi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
@@ -20,7 +20,7 @@ function Sidebar() {
        ? 'bg-[#6f4e37] text-white shadow-inner' 
        : 'text-[#d2b48c] hover:bg-[#5d4037] hover:text-white'
      }`;
-
+  
   const menuItems = [
     { to: "/dashboardadmin", icon: <FiGrid size={20} />, label: "Dashboard" },
     { to: "/crudaboutus", icon: <BsFillFileEarmarkPersonFill size={20} />, label: "About Us" },
@@ -28,6 +28,11 @@ function Sidebar() {
     { to: "/crudartikel", icon: <MdArticle size={20} />, label: "Artikel" },
     { to: "/crudfaq", icon: <MdQuestionAnswer size={20} />, label: "FAQ" },
     { to: "/crudusers", icon: <BsPeopleFill size={20} />, label: "Users" },
+    // Menu Manager baru
+    { to: "/instructors-manager", icon: <FiUsers size={20} />, label: "Instructors Manager" },
+    { to: "/sesi-manager", icon: <FiCalendar size={20} />, label: "Sesi Manager" },
+    { to: "/pendaftaran-manager", icon: <FiClipboard size={20} />, label: "Pendaftaran Manager" },
+    { to: "/kehadiran-manager", icon: <FiUserCheck size={20} />, label: "Kehadiran Manager" },
   ];
 
   return (
@@ -45,27 +50,35 @@ function Sidebar() {
         </button>
       </div>
 
-      {/* Menu */}
-      <nav className="flex-1 px-3 py-4">
-        <ul className="space-y-2">
-          {menuItems.map((item, index) => (
-            <li key={index}>
-              <NavLink 
-                to={item.to} 
-                className={linkClass}
-                data-tooltip-id={isCollapsed ? `tooltip-${index}` : undefined}
-                data-tooltip-content={isCollapsed ? item.label : undefined}
-              >
-                {item.icon}
-                {!isCollapsed && <span>{item.label}</span>}
-              </NavLink>
-              {isCollapsed && (
-                <Tooltip id={`tooltip-${index}`} place="right" className="z-50" />
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Wrapper untuk menu dan tombol logout */}
+      <div className="flex flex-col justify-between flex-1 px-3 py-4">
+        {/* Menu */}
+        <nav>
+          <ul className="space-y-2">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                <NavLink 
+                  to={item.to} 
+                  className={linkClass}
+                  data-tooltip-id={isCollapsed ? `tooltip-${index}` : undefined}
+                  data-tooltip-content={isCollapsed ? item.label : undefined}
+                >
+                  {item.icon}
+                  {!isCollapsed && <span>{item.label}</span>}
+                </NavLink>
+                {isCollapsed && (
+                  <Tooltip id={`tooltip-${index}`} place="right" className="z-50" />
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Tombol Logout akan kita tambahkan nanti */}
+        <div className="mt-auto">
+            {/* Placeholder untuk tombol logout */}
+        </div>
+      </div>
     </aside>
   );
 }

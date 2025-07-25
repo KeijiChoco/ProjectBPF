@@ -1,167 +1,236 @@
+import React, { useState, useEffect } from 'react';
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
-import { artikelAPI } from "../../services/artikelAPI";
+import {
+  getAllArticles,
+  createArticle,
+  updateArticle,
+  deleteArticle,
+  uploadArticleImage,
+} from '../../api/artikelAPI';
 import PageHeader from "../../components/PageHeader";
-import { useState, useEffect } from "react";
 import AlertBox from "../../components/AlertBox";
-import GenericTable from "../../components/GenericTable";
-import EmptyState from "../../components/EmptyState";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
-export default function ArtikelManager() {
+const Artikel = () => {
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [artikels, setArtikels] = useState([]);
-
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({
-    judulartikel: "",
-    deskripsiartikel: "",
-    gambarartikel: "",
+    judul_artikel: '',
+    deskripsi_artikel: '',
+    imageUrl: '',
+    imageFile: null
   });
 
-  const [editMode, setEditMode] = useState(false);
-  const [editId, setEditId] = useState(null);
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const data = await getAllArticles();
+      setArticles(data);
+    } catch (err) {
+      setError('Gagal memuat artikel.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.type === 'file') {
+      setForm({ ...form, imageFile: e.target.files[0] });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      setError("");
-      setSuccess("");
+      setError('');
+      setSuccess('');
 
-      if (editMode && editId !== null) {
-        await artikelAPI.updateArtikel(editId, form);
-        setSuccess("Artikel berhasil diperbarui!");
-      } else {
-        await artikelAPI.createArtikel(form);
-        setSuccess("Artikel berhasil ditambahkan!");
+      let imageUrl = form.imageUrl;
+
+      if (form.imageFile && form.imageFile.size > 0) {
+        imageUrl = await uploadArticleImage(form.imageFile);
       }
 
-      setForm({ judulartikel: "", deskripsiartikel: "", gambarartikel: "" });
+      const dataToSend = {
+        judul_artikel: form.judul_artikel,
+        deskripsi_artikel: form.deskripsi_artikel,
+        gambar_artikel_url: imageUrl || '',
+      };
+
+      if (editMode && selectedArticle) {
+        await updateArticle(selectedArticle.id, dataToSend);
+        setSuccess('Artikel berhasil diperbarui!');
+      } else {
+        await createArticle(dataToSend);
+        setSuccess('Artikel berhasil ditambahkan!');
+      }
+
       setEditMode(false);
-      setEditId(null);
-      loadArtikels();
-      setTimeout(() => setSuccess(""), 3000);
+      setSelectedArticle(null);
+      setForm({
+        judul_artikel: '',
+        deskripsi_artikel: '',
+        imageUrl: '',
+        imageFile: null
+      });
+      fetchArticles();
+      setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      console.error(err);
       setError(`Terjadi kesalahan: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadArtikels = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const data = await artikelAPI.fetchArtikel();
-      setArtikels(data);
-    } catch (err) {
-      setError("Gagal memuat data artikel.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const konfirmasi = confirm("Yakin ingin menghapus artikel ini?");
-    if (!konfirmasi) return;
-
-    try {
-      setLoading(true);
-      await artikelAPI.deleteArtikel(id);
-      loadArtikels();
-    } catch (err) {
-      setError(`Gagal menghapus: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEdit = (item) => {
+  const handleEdit = (article) => {
     setEditMode(true);
-    setEditId(item.id);
+    setSelectedArticle(article);
     setForm({
-      judulartikel: item.judulartikel,
-      deskripsiartikel: item.deskripsiartikel,
-      gambarartikel: item.gambarartikel,
+      judul_artikel: article.judul_artikel,
+      deskripsi_artikel: article.deskripsi_artikel,
+      imageUrl: article.gambar_artikel_url || '',
+      imageFile: null
     });
   };
 
-  useEffect(() => {
-    loadArtikels();
-  }, []);
+  const handleDelete = async (id) => {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus artikel ini?')) return;
+    
+    try {
+      setLoading(true);
+      setError('');
+      setSuccess('');
+      
+      await deleteArticle(id);
+      setSuccess('Artikel berhasil dihapus!');
+      fetchArticles();
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      setError('Gagal menghapus artikel.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setSelectedArticle(null);
+    setForm({
+      judul_artikel: '',
+      deskripsi_artikel: '',
+      imageUrl: '',
+      imageFile: null
+    });
+  };
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#fefaf6] pb-20">
       <PageHeader title="Manajemen Artikel" breadcrumb={["Admin", "Artikel"]}>
         <button
           onClick={() => window.location.href = "/dashboardadmin"}
-          className="bg-gray-600 text-white px-4 py-2 rounded-lg text-l"
+          className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
         >
           Kembali
         </button>
       </PageHeader>
 
-      <div className="max-w-2xl mx-auto p-6">
-        <h2 className="text-3xl font-bold text-[#4e342e] mb-6">Artikel</h2>
+      <div className="max-w-6xl mx-auto mt-10 p-6">
+        <h2 className="text-3xl font-bold text-[#4e342e] mb-4">Kelola Artikel</h2>
+        <p className="text-gray-600 mb-8">
+          Kelola artikel yang akan ditampilkan di website Anda.
+        </p>
 
         {error && <AlertBox type="error">{error}</AlertBox>}
         {success && <AlertBox type="success">{success}</AlertBox>}
+        {loading && <LoadingSpinner text="Memuat data..." />}
 
-        <div className="bg-white p-6 rounded-2xl shadow-md mb-6">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            {editMode ? "Edit Artikel" : "Tambah Artikel"}
+        {/* Form Input */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 mb-8">
+          <h3 className="text-xl font-semibold text-[#6f4e37] mb-4">
+            {editMode ? 'Edit Artikel' : 'Tambah Artikel Baru'}
           </h3>
+          
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block mb-1 text-gray-700 font-medium">Judul Artikel</label>
+                <input
+                  type="text"
+                  name="judul_artikel"
+                  placeholder="Masukkan judul artikel"
+                  value={form.judul_artikel}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-[#8d6e63]"
+                  required
+                />
+              </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="judulartikel"
-              placeholder="Judul Artikel"
-              value={form.judulartikel}
-              onChange={handleChange}
-              className="w-full p-3 rounded border"
-              required
-            />
-            <textarea
-              name="deskripsiartikel"
-              placeholder="Deskripsi Artikel"
-              value={form.deskripsiartikel}
-              onChange={handleChange}
-              className="w-full p-3 rounded border"
-              rows="3"
-              required
-            />
-            <input
-              type="url"
-              name="gambarartikel"
-              placeholder="Link Gambar (URL)"
-              value={form.gambarartikel}
-              onChange={handleChange}
-              className="w-full p-3 rounded border"
-              required
-            />
+              <div>
+                <label className="block mb-1 text-gray-700 font-medium">URL Gambar (Opsional)</label>
+                <input
+                  type="url"
+                  name="imageUrl"
+                  placeholder="https://example.com/image.jpg"
+                  value={form.imageUrl}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-[#8d6e63]"
+                />
+              </div>
+            </div>
 
-            <div className="flex gap-3">
+            <div>
+              <label className="block mb-1 text-gray-700 font-medium">Deskripsi Artikel</label>
+              <textarea
+                name="deskripsi_artikel"
+                placeholder="Tulis deskripsi artikel di sini..."
+                value={form.deskripsi_artikel}
+                onChange={handleChange}
+                className="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-[#8d6e63]"
+                rows="4"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1 text-gray-700 font-medium">Upload Gambar</label>
+              <input
+                type="file"
+                name="imageFile"
+                accept="image/*"
+                onChange={handleChange}
+                className="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-[#8d6e63]"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Pilih file gambar jika ingin mengganti gambar dari URL
+              </p>
+            </div>
+
+            <div className="flex gap-3 mt-4">
               <button
                 type="submit"
-                className="bg-[#6f4e37] text-white px-5 py-2 rounded hover:bg-[#5d4037]"
+                className="bg-[#6f4e37] text-white px-6 py-2 rounded-md hover:bg-[#5d4037] transition"
+                disabled={loading}
               >
-                {editMode ? "Simpan Perubahan" : "Tambah"}
+                {editMode ? 'Simpan Perubahan' : 'Tambah Artikel'}
               </button>
               {editMode && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setEditMode(false);
-                    setEditId(null);
-                    setForm({ judulartikel: "", deskripsiartikel: "", gambarartikel: "" });
-                  }}
-                  className="bg-gray-400 px-5 py-2 text-white rounded hover:bg-gray-500"
+                  onClick={handleCancel}
+                  className="bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition"
                 >
                   Batal
                 </button>
@@ -170,49 +239,92 @@ export default function ArtikelManager() {
           </form>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-lg font-semibold mb-4">Daftar Artikel ({artikels.length})</h3>
+        {/* Daftar Artikel */}
+        {!loading && articles.length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200">
+            <div className="p-6 border-b border-gray-200">
+              <h3 className="text-xl font-semibold text-[#6f4e37]">Daftar Artikel</h3>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Judul
+                    </th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Deskripsi
+                    </th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Gambar
+                    </th>
+                    <th className="py-3 px-6 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {articles.map((article) => (
+                    <tr key={article.id} className="hover:bg-gray-50">
+                      <td className="py-4 px-6">
+                        <div className="text-sm font-medium text-gray-900">
+                          {article.judul_artikel}
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="text-sm text-gray-600 max-w-xs truncate">
+                          {article.deskripsi_artikel}
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        {article.gambar_artikel_url ? (
+                          <img 
+                            src={article.gambar_artikel_url} 
+                            alt="Gambar Artikel" 
+                            className="w-16 h-16 object-cover rounded-lg"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <span className="text-gray-400 text-xs">No Image</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="py-4 px-6 text-right">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => handleEdit(article)}
+                            className="p-2 text-[#5d4037] hover:bg-[#5d4037] hover:text-white rounded-md transition"
+                            title="Edit Artikel"
+                          >
+                            <AiFillEdit className="text-lg" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(article.id)}
+                            className="p-2 text-red-600 hover:bg-red-600 hover:text-white rounded-md transition"
+                            title="Hapus Artikel"
+                          >
+                            <AiFillDelete className="text-lg" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
-          {loading && <LoadingSpinner text="Memuat data..." />}
-          {!loading && artikels.length === 0 && !error && (
-            <EmptyState text="Belum ada artikel yang ditambahkan." />
-          )}
-          {!loading && artikels.length > 0 && (
-            <GenericTable
-              columns={["#", "Judul", "Deskripsi", "Gambar", "Aksi"]}
-              data={artikels}
-              renderRow={(item, index) => (
-                <>
-                  <td className="px-6 py-4">{index + 1}</td>
-                  <td className="px-6 py-4 font-semibold text-[#6f4e37]">{item.judulartikel}</td>
-                  <td className="px-6 py-4">{item.deskripsiartikel}</td>
-                  <td className="px-6 py-4">
-                    <img
-                      src={item.gambarartikel}
-                      alt="gambar artikel"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://via.placeholder.com/100x60?text=No+Image";
-                      }}
-                      className="w-20 h-12 object-cover rounded shadow"
-                    />
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-3">
-                      <button onClick={() => handleEdit(item)}>
-                        <AiFillEdit className="text-blue-500 text-2xl hover:text-blue-700" />
-                      </button>
-                      <button onClick={() => handleDelete(item.id)}>
-                        <AiFillDelete className="text-red-500 text-2xl hover:text-red-700" />
-                      </button>
-                    </div>
-                  </td>
-                </>
-              )}
-            />
-          )}
-        </div>
+        {/* Jika belum ada artikel */}
+        {!loading && articles.length === 0 && (
+          <div className="text-center text-gray-600 mt-10">
+            Belum ada <strong>artikel</strong>. Silakan tambahkan artikel pertama Anda.
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default Artikel;

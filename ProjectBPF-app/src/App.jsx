@@ -1,4 +1,4 @@
-// src/App.jsx
+// src/App.jsx - Alternative dengan mixed public/protected routes
 
 import "./assets/tailwind.css";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -7,8 +7,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayoutAdmin from './layouts/MainLayoutAdmin';
 import MainLayoutGuest from './layouts/MainLayoutGuest';
 
-// Protector
+// Protectors & Guards
 import AdminRoute from './components/AdminRoute';
+import GuestRoute from './components/GuestRoute';
+import PublicRoute from './components/PublicRoute';
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 
 // Admin Pages
 import DashboardAdmin from './pages/Admin/DashboardAdmin';
@@ -16,7 +19,13 @@ import Program from "./pages/Admin/Program";
 import Artikel from "./pages/Admin/Artikel";
 import Faq from "./pages/Admin/Faq";
 import AboutUs from "./pages/Admin/AboutUs";
-import Users from "./pages/Admin/Users"; // <-- Impor halaman Users
+import Users from "./pages/Admin/Users";
+
+// Manager Pages
+import InstructorsManager from "./pages/Admin/InstructorsManager";
+import SesiManager from "./pages/Admin/SesiManager";
+import PendaftaranManager from "./pages/Admin/PendaftaranManager";
+import KehadiranManager from "./pages/Admin/KehadiranManager";
 
 // Guest Pages
 import HomePageGuest from './pages/Guest/HomePageGuest';
@@ -25,22 +34,49 @@ import FaqPage from './pages/Guest/FAQPage';
 import ArtikelPage from "./pages/Guest/ArtikelPage";
 import AboutUsPage from "./pages/Guest/AboutUsPage";
 
-// Auth Page (jika diperlukan nanti)
-// import LoginPage from "./pages/LoginPage";
+// Auth Pages
+import LoginPage from "./pages/Auth/LoginPage";
+import RegisterPage from "./pages/Auth/RegisterPage";
+import ForgotPasswordPage from "./pages/Auth/ForgotPasswordPage";
+import UpdatePasswordPage from "./pages/Auth/UpdatePasswordPage";
 
 function App() {
   return (
     <Routes>
-      {/* Rute Guest (Publik) */}
-      <Route path="/guest" element={<MainLayoutGuest />}>
-        <Route index element={<HomePageGuest />} />
-        <Route path="program" element={<ProgramPage />} />
-        <Route path="faq" element={<FaqPage />} />
-        <Route path="artikel" element={<ArtikelPage />} />
-        <Route path="about-us" element={<AboutUsPage />} />
+      {/* Auth Routes - Redirect jika sudah login */}
+      <Route element={<PublicRoute redirectIfAuthenticated={true} />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/update-password" element={<UpdatePasswordPage />} />
       </Route>
 
-      {/* Rute Admin yang Dilindungi (atau dibypass) */}
+      {/* OAuth Callback */}
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
+
+      {/* Public Guest Routes - Bisa diakses tanpa login */}
+      <Route element={<PublicRoute redirectIfAuthenticated={false} />}>
+        <Route path="/home" element={<MainLayoutGuest />}>
+          <Route index element={<HomePageGuest />} />
+          <Route path="program" element={<ProgramPage />} />
+          <Route path="faq" element={<FaqPage />} />
+          <Route path="artikel" element={<ArtikelPage />} />
+          <Route path="about-us" element={<AboutUsPage />} />
+        </Route>
+      </Route>
+
+      {/* Protected Guest Routes - Perlu login untuk akses penuh */}
+      <Route element={<GuestRoute />}>
+        <Route path="/guest" element={<MainLayoutGuest />}>
+          <Route index element={<HomePageGuest />} />
+          <Route path="program" element={<ProgramPage />} />
+          <Route path="faq" element={<FaqPage />} />
+          <Route path="artikel" element={<ArtikelPage />} />
+          <Route path="about-us" element={<AboutUsPage />} />
+        </Route>
+      </Route>
+
+      {/* Admin Routes - Perlu admin role */}
       <Route element={<AdminRoute />}>
         <Route element={<MainLayoutAdmin />}>
           <Route path="/dashboardadmin" element={<DashboardAdmin />} />
@@ -48,12 +84,19 @@ function App() {
           <Route path="/crudartikel" element={<Artikel />} />
           <Route path="/crudfaq" element={<Faq />} />
           <Route path="/crudaboutus" element={<AboutUs />} />
-          <Route path="/crudusers" element={<Users />} /> {/* <-- Tambahkan rute untuk Users */}
+          <Route path="/crudusers" element={<Users />} />
+          
+          {/* Manager Routes */}
+          <Route path="/instructors-manager" element={<InstructorsManager />} />
+          <Route path="/sesi-manager" element={<SesiManager />} />
+          <Route path="/pendaftaran-manager" element={<PendaftaranManager />} />
+          <Route path="/kehadiran-manager" element={<KehadiranManager />} />
         </Route>
       </Route>
 
-      {/* Rute Default, alihkan ke halaman guest */}
-      <Route path="/" element={<Navigate to="/guest" replace />} />
+      {/* Default Routes */}
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 }
